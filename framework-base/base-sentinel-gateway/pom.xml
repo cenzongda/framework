@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>net.unsun.infrastructure</groupId>
+    <artifactId>framework-base</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>base-sentinel-gateway</artifactId>
+  <packaging>jar</packaging>
+  <name>base-sentinel-gateway</name>
+  <properties>
+    <!-- 使用属性统一管理版本 -->
+    <junit.jupiter.version>5.10.1</junit.jupiter.version>
+    <!-- 推荐同时定义 Surefire 版本 -->
+    <maven.surefire.version>3.2.5</maven.surefire.version>
+  </properties>
+  <dependencies>
+    <!-- ... 其他依赖保持不变 ... -->
+    <dependency>
+      <groupId>net.unsun.infrastructure</groupId>
+      <artifactId>base-common-kit</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+      <version>${seata.alibaba.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-alibaba-sentinel-gateway</artifactId>
+      <version>${seata.alibaba.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.alibaba.csp</groupId>
+      <artifactId>sentinel-datasource-nacos</artifactId>
+      <version>${sentinel.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.30</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- **** 关键修改：用 junit-jupiter 替换 api 和 engine **** -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.jupiter.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- 如果您的项目中同时存在 JUnit 4 或需要运行 JUnit 4 测试，请添加此项 -->
+    <!-- <dependency>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
+      <version>${junit.jupiter.version}</version>
+      <scope>test</scope>
+    </dependency> -->
+
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <!-- 保持版本号与您使用的版本一致 -->
+        <version>${maven.surefire.version}</version>
+        <configuration>
+          <!-- 确保在非模块化项目上，依赖能够正确加载 -->
+          <useModulePath>false</useModulePath>
+          <!-- 如果模块没有测试，则不失败构建，保持现有配置 -->
+          <failIfNoTests>false</failIfNoTests>
+
+          <!-- **** 关键配置：指定 Forked JVM 的 JDK 版本 (如果 Surefire 自动选择的版本过低) **** -->
+          <!-- 如果您使用的是 JDK 17+ 运行 Maven，但测试代码是 Java 11，可能需要指定 -->
+          <!-- <jvm>path/to/your/jdk11/bin/java</jvm> -->
+
+          <!-- 排除任何潜在的 JUnit 4 干扰 -->
+          <excludes>
+            <exclude>**/*Test.java</exclude>
+          </excludes>
+          <includes>
+            <include>**/*Test.java</include>
+            <include>**/*Tests.java</include>
+          </includes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
