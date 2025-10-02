@@ -1,5 +1,0 @@
-dependencies {
-    compile("io.springfox:springfox-swagger2:${springfoxVersion}") 
-    //官方默认
-    compile("io.springfox:springfox-swagger-ui:${springfoxVersion}")
-}

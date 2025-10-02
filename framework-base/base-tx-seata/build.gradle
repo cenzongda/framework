@@ -1,6 +1,0 @@
-dependencies {
-    compile("io.seata:seata-spring-boot-starter:${seataVersion}") {
-        exclude(module:"druid")
-    }
-    compile ("com.alibaba.cloud:spring-cloud-alibaba-seata:${seataAlibabaVersion}")
-}
